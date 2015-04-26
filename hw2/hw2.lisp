@@ -7,20 +7,19 @@
 )
 
 (defun merge-two-list (left right)
-  (let ((r '()))
-    (loop while (and left right) do
+  (cond 
+    ((= 0 (length left))
+      right
+    )
+    ((= 0 (length right))
+      left
+    )
+    (t
       (if (< (car left) (car right))
-        (progn
-          (setq r (append r (list (car left))))
-          (setq left (cdr left)))
-        (progn
-          (setq r (append r (list (car right))))
-          (setq right (cdr right)))
+        (cons (car left) (merge-two-list (cdr left) right))
+        (cons (car right) (merge-two-list left (cdr right)))
       )
     )
-    (if left (setq r (append r left)))
-    (if right (setq r (append r right)))
-    r
   )
 )
 
