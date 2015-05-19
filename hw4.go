@@ -14,10 +14,12 @@ func init() {
 }
 
 func imageToSlice(img image.Image) [][][]uint8{
-    test := make([][][]uint8, 538)
-    for y := 0; y < 538; y += 1 {
-        test[y] = make([][]uint8, 718)
-        for x := 0; x < 718; x += 1 {
+    width := img.Bounds().Max.X
+    height := img.Bounds().Max.Y
+    test := make([][][]uint8, height)
+    for y := 0; y < height; y += 1 {
+        test[y] = make([][]uint8, width)
+        for x := 0; x < width; x += 1 {
             test[y][x] = make([]uint8, 3)
             a := img.At(x, y)
             rIn, gIn, bIn, _ := a.RGBA()
@@ -89,15 +91,15 @@ func main() {
     a := imgIn.At(0, 0)
     rIn, gIn, bIn, _ := a.RGBA()
     fmt.Println(rIn, gIn, bIn)
-    bounds := imgIn.Bounds()
-    fmt.Println(bounds)
+    width := imgIn.Bounds().Max.X
+    height := imgIn.Bounds().Max.Y
 
 
     x := imageToSlice(imgIn)
-    arr := rgbToGray(x, 718, 538)
+    arr := rgbToGray(x, width, height)
 
-    result := make([][]uint8, 538)
-    sobel(arr, result, 718, 538)
+    result := make([][]uint8, height)
+    sobel(arr, result, width, height)
     fmt.Println(result[1][1])
 
 
@@ -111,12 +113,20 @@ func main() {
 
 
 
-    imgRect := image.Rect(0, 0, 718, 538)
+    imgRect := image.Rect(0, 0, width, height)
     img := image.NewRGBA(imgRect)
     draw.Draw(img, img.Bounds(), &image.Uniform{color.White}, image.ZP, draw.Src)
-    for y := 0; y < 538; y += 1 {
-        for x := 0; x < 718; x += 1 {
-            draw.Draw(img, image.Rect(x, y, x+1, y+1), &image.Uniform{color.RGBA{arr[y][x], arr[y][x], arr[y][x], 0}}, image.ZP, draw.Src)
+    for y := 0; y < height; y += 1 {
+        for x := 0; x < width; x += 1 {
+            draw.Draw(
+                      img,
+                      image.Rect(x, y, x+1, y+1),
+                      &image.Uniform{color.RGBA{
+                                                result[y][x],
+                                                result[y][x],
+                                                result[y][x],
+                                                0}},
+                      image.ZP, draw.Src)
         }
     }
     var opt jpeg.Options
