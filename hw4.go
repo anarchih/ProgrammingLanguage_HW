@@ -72,7 +72,6 @@ func sobel(arr [][]uint8, result [][]uint8, width int, height int){
 
         }
     }
-    fmt.Println(result[1][1])
 }
 
 func main() {
@@ -88,9 +87,6 @@ func main() {
     defer imgfile.Close()
 
     imgIn, _, err := image.Decode(imgfile)
-    a := imgIn.At(0, 0)
-    rIn, gIn, bIn, _ := a.RGBA()
-    fmt.Println(rIn, gIn, bIn)
     width := imgIn.Bounds().Max.X
     height := imgIn.Bounds().Max.Y
 
@@ -100,7 +96,6 @@ func main() {
 
     result := make([][]uint8, height)
     sobel(arr, result, width, height)
-    fmt.Println(result[1][1])
 
 
     imgOut, err := os.Create("output/output.jpg")
