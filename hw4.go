@@ -9,8 +9,6 @@ import (
 )
 
 func init() {
-    // damn important or else At(), Bounds() functions will
-    // caused memory pointer error!!
     image.RegisterFormat("jpeg", "jpeg", jpeg.Decode, jpeg.DecodeConfig)
 }
 
@@ -90,7 +88,7 @@ func main() {
 
     opt.Quality = 100
 
-    err = jpeg.Encode(imgOut, img, &opt) // put quality to 80%
+    err = jpeg.Encode(imgOut, img, &opt)
     if err != nil {
         fmt.Println(err)
         os.Exit(1)
