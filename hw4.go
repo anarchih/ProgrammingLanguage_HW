@@ -13,7 +13,7 @@ func init() {
     image.RegisterFormat("jpeg", "jpeg", jpeg.Decode, jpeg.DecodeConfig)
 }
 
-func imageToArray(img image.Image) [][][]uint8{
+func imageToSlice(img image.Image) [][][]uint8{
     test := make([][][]uint8, 538)
     for y := 0; y < 538; y += 1 {
         test[y] = make([][]uint8, 718)
@@ -93,7 +93,7 @@ func main() {
     fmt.Println(bounds)
 
 
-    x := imageToArray(imgIn)
+    x := imageToSlice(imgIn)
     arr := rgbToGray(x, 718, 538)
 
     result := make([][]uint8, 538)
